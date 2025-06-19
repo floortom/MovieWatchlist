@@ -12,6 +12,8 @@ INSERT_MOVIES = """INSERT INTO movies (title, releaseTimestamp, watched)
 SELECT_ALL_MOVIES = "SELECT * FROM movies;"
 SELECT_UPCOMING_MOVIES = "SELECT * FROM movies WHERE releaseTimestamp > ?;"
 SELECT_WATCHED_MOVIES = "SELECT * FROM movies WHERE watched = 1;"
+WATCH_MOVIE = "UPDATE movies SET watched = 1 WHERE title = ?;"
+
 
 connection = sqlite3.connect("Movies.db")
 
@@ -39,7 +41,9 @@ def get_movies(upcoming=False):
 
 
 def watch_movie(title):
-    pass
+    with connection:
+        connection.execute(WATCH_MOVIE,
+                           (title,))
 
 
 def get_watched_movies():
