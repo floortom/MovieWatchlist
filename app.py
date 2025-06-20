@@ -4,11 +4,12 @@ import database as db
 menu = """Please select one of the following options:
 1) Add new movie.
 2) View upcoming movies.
-3) View all movies
-4) Watch a movie
+3) View all movies.
+4) Watch a movie.
 5) View watched movies.
 6) Add user to the app.
-7) Exit.
+7) Search for a movie.
+8) Exit.
 
 Your selection: """
 welcome = "Welcome to the watchlist app!"
@@ -18,6 +19,10 @@ print(welcome)
 db.create_tables()
 
 
+def prompt_add_user():
+    username = input("Username: ")
+    db.add_user(username)
+
 def prompt_add_movie():
     title = input("Movie title: ")
     releaseDate = input("Release date (dd-mm-YYYY): ")
@@ -26,15 +31,20 @@ def prompt_add_movie():
     db.add_movie(title, timeStamp)
 
 
+def prompt_search():
+    term = input("Enter the partial movie title: ")
+    results = db.search_movies(term)
+    if results:
+        print_movies("Found", results)
+    else:
+        print("Found no movies for that search term!")
+
+
+
 def prompt_watch_movie():
     username = input("Username: ")
     movID = input("Enter the watched movie ID: ")
     db.watch_movie(username, movID)
-
-
-def prompt_add_user():
-    username = input("Username: ")
-    db.add_user(username)
 
 
 def prompt_show_watched():
@@ -62,7 +72,7 @@ def print_movies(heading, movies):
 #     print("---" * 6, "\n")
 
 
-while (user_input := input(menu)) != "7":
+while (user_input := input(menu)) != "8":
     if user_input == "1":
         prompt_add_movie()
     elif user_input == "2":
@@ -77,5 +87,7 @@ while (user_input := input(menu)) != "7":
         prompt_show_watched()
     elif user_input == "6":
         prompt_add_user()
+    elif user_input == "7":
+        prompt_search()
     else:
         print("Invalid input, please try again!")
